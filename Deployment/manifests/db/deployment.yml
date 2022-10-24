@@ -29,7 +29,7 @@ spec:
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
+              name: mmanagementmssql
               key: pwd
         volumeMounts:
         - name: mssqldb
