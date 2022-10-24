@@ -17,7 +17,11 @@ public class ManagementContext : DbContext
         : base(options)
     {
         _loggerFactory = loggerFactory;
-        Database.EnsureCreated();
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLoggerFactory(_loggerFactory).EnableSensitiveDataLogging();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
