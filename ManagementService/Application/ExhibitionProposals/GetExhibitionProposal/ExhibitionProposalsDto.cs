@@ -1,6 +1,6 @@
 ﻿namespace ManagementService.Application.ExhibitionProposals.GetExhibitionProposal;
 
-public class ExhibitionProposalsDto
+public class ExhibitionProposalDto
 {
     public Guid Id { get; set; }
 

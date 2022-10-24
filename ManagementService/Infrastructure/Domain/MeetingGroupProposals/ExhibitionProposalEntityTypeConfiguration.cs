@@ -16,7 +16,7 @@ public class ExhibitionProposalEntityTypeConfiguration : IEntityTypeConfiguratio
 
         builder.Property<string>("_name").HasColumnName("Name");
         builder.Property<string>("_description").HasColumnName("Description");
-        builder.Property<UserId>("_proposalUserId").HasColumnName("ProposalUserId").HasConversion(v => v.Value, c => new UserId(c)); ;
+        builder.Property<UserId>("_proposalUserId").HasColumnName("ProposalUserId").HasConversion(v => v.Value, c => new UserId(c));
         builder.Property<DateTime>("_proposalDate").HasColumnName("ProposalDate");
 
         builder.OwnsOne<ExhibitionProposalsStatus>("_status", b =>
@@ -29,7 +29,7 @@ public class ExhibitionProposalEntityTypeConfiguration : IEntityTypeConfiguratio
             b.Property(p => p.Code).HasColumnName("DecisionCode");
             b.Property(p => p.Date).HasColumnName("DecisionDate");
             b.Property(p => p.RejectReason).HasColumnName("DecisionRejectReason");
-            b.Property(p => p.UserId).HasColumnName("DecisionUserId");
+            b.Property(p => p.UserId).HasColumnName("DecisionUserId").HasConversion(v => v.Value, c => new UserId(c));
         });
     }
 }

@@ -10,7 +10,8 @@ public class MemberEntityTypeConfiguration : IEntityTypeConfiguration<Member>
     {
         builder.ToTable("Members", "management");
 
-        builder.HasKey(x => x.Id);
+        builder.Property<MemberId>("Id").HasConversion(v => v.Value, c => new MemberId(c));
+        builder.HasKey("Id");
 
         builder.Property<string>("_login").HasColumnName("Login");
         builder.Property<string>("_email").HasColumnName("Email");

@@ -20,6 +20,11 @@ public class AcceptExhibitionProposalsCommandHandler : ICommandHandler<AcceptExh
     {
         var exhibitionProposals = await _exhibitionProposalsRepository.GetByIdAsync(new ExhibitionProposalsId(request.ExhibitionProposalsId));
 
+        if (exhibitionProposals is null)
+        {
+            throw new Exception("Exhibition Proposals must exist");
+        }
+
         exhibitionProposals.Accept(_userContext.UserId);
 
         return Unit.Value;

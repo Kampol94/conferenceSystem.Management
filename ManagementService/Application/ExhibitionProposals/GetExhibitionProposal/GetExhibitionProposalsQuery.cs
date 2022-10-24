@@ -2,7 +2,7 @@
 
 namespace ManagementService.Application.ExhibitionProposals.GetExhibitionProposal;
 
-public class GetExhibitionProposalsQuery : QueryBase<ExhibitionProposalsDto>
+public class GetExhibitionProposalsQuery : QueryBase<ExhibitionProposalDto>
 {
     public GetExhibitionProposalsQuery(Guid exhibitionProposalsId)
     {

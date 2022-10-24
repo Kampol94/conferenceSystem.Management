@@ -4,7 +4,7 @@ using ManagementService.Application.Contracts.Queries;
 
 namespace ManagementService.Application.ExhibitionProposals.GetExhibitionProposal;
 
-public class GetExhibitionProposalsQueryHandler : IQueryHandler<GetExhibitionProposalsQuery, ExhibitionProposalsDto>
+public class GetExhibitionProposalsQueryHandler : IQueryHandler<GetExhibitionProposalsQuery, ExhibitionProposalDto>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -13,24 +13,24 @@ public class GetExhibitionProposalsQueryHandler : IQueryHandler<GetExhibitionPro
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
-    public async Task<ExhibitionProposalsDto> Handle(GetExhibitionProposalsQuery query, CancellationToken cancellationToken)
+    public async Task<ExhibitionProposalDto> Handle(GetExhibitionProposalsQuery query, CancellationToken cancellationToken)
     {
         var connection = _sqlConnectionFactory.GetOpenConnection();
 
         string sql = "SELECT " +
-                     $"[ExhibitionProposals].[Id] AS [{nameof(ExhibitionProposalsDto.Id)}], " +
-                     $"[ExhibitionProposals].[Name] AS [{nameof(ExhibitionProposalsDto.Name)}], " +
-                     $"[ExhibitionProposals].[ProposalUserId] AS [{nameof(ExhibitionProposalsDto.ProposalUserId)}], " +
-                     $"[ExhibitionProposals].[Description] AS [{nameof(ExhibitionProposalsDto.Description)}], " +
-                     $"[ExhibitionProposals].[ProposalDate] AS [{nameof(ExhibitionProposalsDto.ProposalDate)}], " +
-                     $"[ExhibitionProposals].[StatusCode] AS [{nameof(ExhibitionProposalsDto.StatusCode)}], " +
-                     $"[ExhibitionProposals].[DecisionDate] AS [{nameof(ExhibitionProposalsDto.DecisionDate)}], " +
-                     $"[ExhibitionProposals].[DecisionUserId] AS [{nameof(ExhibitionProposalsDto.DecisionUserId)}], " +
-                     $"[ExhibitionProposals].[DecisionCode] AS [{nameof(ExhibitionProposalsDto.DecisionCode)}], " +
-                     $"[ExhibitionProposals].[DecisionRejectReason] AS [{nameof(ExhibitionProposalsDto.DecisionRejectReason)}] " +
-                     "FROM [management].[v_ExhibitionProposalss] AS [ExhibitionProposals] " +
-                     "WHERE [ExhibitionProposals].[Id] = @ExhibitionProposalsId";
+                     $"[ExhibitionProposal].[Id] AS [{nameof(ExhibitionProposalDto.Id)}], " +
+                     $"[ExhibitionProposal].[Name] AS [{nameof(ExhibitionProposalDto.Name)}], " +
+                     $"[ExhibitionProposal].[ProposalUserId] AS [{nameof(ExhibitionProposalDto.ProposalUserId)}], " +
+                     $"[ExhibitionProposal].[Description] AS [{nameof(ExhibitionProposalDto.Description)}], " +
+                     $"[ExhibitionProposal].[ProposalDate] AS [{nameof(ExhibitionProposalDto.ProposalDate)}], " +
+                     $"[ExhibitionProposal].[StatusCode] AS [{nameof(ExhibitionProposalDto.StatusCode)}], " +
+                     $"[ExhibitionProposal].[DecisionDate] AS [{nameof(ExhibitionProposalDto.DecisionDate)}], " +
+                     $"[ExhibitionProposal].[DecisionUserId] AS [{nameof(ExhibitionProposalDto.DecisionUserId)}], " +
+                     $"[ExhibitionProposal].[DecisionCode] AS [{nameof(ExhibitionProposalDto.DecisionCode)}], " +
+                     $"[ExhibitionProposal].[DecisionRejectReason] AS [{nameof(ExhibitionProposalDto.DecisionRejectReason)}] " +
+                     "FROM [management].[ExhibitionProposals] AS [ExhibitionProposal] " +
+                     "WHERE [ExhibitionProposal].[Id] = @ExhibitionProposalId";
 
-        return await connection.QuerySingleAsync<ExhibitionProposalsDto>(sql, new { query.ExhibitionProposalsId });
+        return await connection.QuerySingleAsync<ExhibitionProposalDto>(sql, new { query.ExhibitionProposalsId });
     }
 }
