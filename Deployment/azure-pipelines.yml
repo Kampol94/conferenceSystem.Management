@@ -11,6 +11,7 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'conferencesystem11601c33-auth'
+  dbSecret: 'mssql'
 
   vmImageName: 'ubuntu-latest'
 
@@ -35,7 +36,7 @@ stages:
         tags: |
           $(tag)
 
-    - upload: manifests
+    - upload: Deployment/manifests
       artifact: manifests
 
 - stage: Deploy
@@ -61,12 +62,28 @@ stages:
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           - task: KubernetesManifest@0
-            displayName: Deploy to Kubernetes cluster
+            displayName: Create dbSecret
+            inputs:
+              action: 'createSecret'
+              secretType: 'generic'
+              secretName: '$(dbSecret)'
+              secretArguments: '--from-literal=pwd=$(DbPwd) --from-literal=constr="Data Source=eventdb;User ID=sa;Password=$(DbPwd);Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"'
+
+          - task: KubernetesManifest@0
+            displayName: Deploy DB to Kubernetes cluster
             inputs:
               action: deploy
               manifests: |
-                $(Pipeline.Workspace)/Deployment/manifests/deployment.yml
-                $(Pipeline.Workspace)/Deployment/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/db/pvc.yml
+                $(Pipeline.Workspace)/manifests/db/deployment.yml
+
+          - task: KubernetesManifest@0
+            displayName: Deploy API to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/api/deployment.yml
+                $(Pipeline.Workspace)/manifests/api/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
@@ -101,13 +118,30 @@ stages:
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
           - task: KubernetesManifest@0
+            displayName: Create dbSecret
+            inputs:
+              action: 'createSecret'
+              secretType: 'generic'
+              secretName: '$(dbSecret)'
+              secretArguments: '--from-literal=pwd=$(DbPwd) --from-literal=constr="Data Source=eventdb;User ID=sa;Password=$(DbPwd);Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"'
+
+          - task: KubernetesManifest@0
+            displayName: Deploy DB to Kubernetes cluster
+            inputs:
+              action: deploy
+              namespace: $(k8sNamespaceForPR)
+              manifests: |
+                $(Pipeline.Workspace)/manifests/db/pvc.yml
+                $(Pipeline.Workspace)/manifests/db/deployment.yml
+
+          - task: KubernetesManifest@0
             displayName: Deploy to the new namespace in the Kubernetes cluster
             inputs:
               action: deploy
               namespace: $(k8sNamespaceForPR)
               manifests: |
-                $(Pipeline.Workspace)/Deployment/manifests/deployment.yml
-                $(Pipeline.Workspace)/Deployment/manifests/service.yml
+                $(Pipeline.Workspace)/Deployment/manifests/api/deployment.yml
+                $(Pipeline.Workspace)/Deployment/manifests/api/service.yml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
