@@ -17,6 +17,7 @@ public class ManagementContext : DbContext
         : base(options)
     {
         _loggerFactory = loggerFactory;
+        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
