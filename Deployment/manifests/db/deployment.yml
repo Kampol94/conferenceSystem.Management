@@ -32,10 +32,10 @@ spec:
               name: mmanagementmssql
               key: pwd
         volumeMounts:
-        - name: mssqldb
+        - name: managmentmssqldb
           mountPath: /var/opt/mssql
       volumes:
-      - name: mssqldb
+      - name: managmentmssqldb
         persistentVolumeClaim:
           claimName: mmanagementdb-data
 ---
