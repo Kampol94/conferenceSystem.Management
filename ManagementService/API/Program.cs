@@ -1,8 +1,6 @@
-using EventService.API;
 using ManagementService.API;
 using ManagementService.Application;
 using ManagementService.Application.Contracts;
-using ManagementService.Domain.Users;
 using ManagementService.Infrastructure;
 using ManagementService.Infrastructure.Services;
 using MediatR;

@@ -1,17 +1,16 @@
 ﻿using ManagementService.Domain.Contracts.Exceptions;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace ManagementService.Domain.Contracts;
 
 public abstract class BaseEntity
 {
-    private readonly IMediator _mediator = new ServiceCollection().AddMediatR(Assembly.GetExecutingAssembly()).BuildServiceProvider().GetRequiredService<IMediator>(); //TODO: fix this anti pattern 
+    private readonly Queue<IBaseDomainEvent> _events = new Queue<IBaseDomainEvent>();
+
+    public int CountEvents => _events.Count;
 
     protected void AddDomainEvent(IBaseDomainEvent domainDomainEvent)
     {
-        _mediator.Publish(domainDomainEvent);
+        _events.Enqueue(domainDomainEvent);
     }
 
     protected static void CheckRule(IBaseBusinessRule rule)
@@ -20,5 +19,10 @@ public abstract class BaseEntity
         {
             throw new BusinessRuleValidationException(rule);
         }
+    }
+
+    public IBaseDomainEvent DequeueEvent()
+    {
+        return _events.Dequeue();
     }
 }

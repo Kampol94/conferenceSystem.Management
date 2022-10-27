@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using ManagementService.Domain.Users;
+using UserService.Application.Contracts.Commands;
 
 namespace ManagementService.Application;
 
@@ -13,6 +14,7 @@ public static class ServiceExtensions
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient<IUserContext, UserContext>();
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CommitBehavior<,>));
         return services;
     }
 }
