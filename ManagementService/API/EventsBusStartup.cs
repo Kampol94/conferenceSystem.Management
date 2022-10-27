@@ -11,5 +11,6 @@ public static class EventsBusStartup
     public static void Initialize(IEventBus eventBus, IMediator mediator)
     {
         eventBus.Subscribe<NewUserRegisteredIntegrationEvent>(new NewUserRegisteredIntegrationEventHandler(mediator));
+        eventBus.Subscribe(new ExhibitionProposedIntegrationEventHandler(mediator));
     }
 }
