@@ -9,9 +9,9 @@ public class ExhibitionProposalsAcceptedNotificationHandler : INotificationHandl
 {
     private readonly IEventService _eventService;
 
-    public ExhibitionProposalsAcceptedNotificationHandler(IEventService eventService)
+    public ExhibitionProposalsAcceptedNotificationHandler()
     {
-        _eventService = eventService;
+        //_eventService = eventService;
     }
 
     public Task Handle(ExhibitionProposalsAcceptedDomainEvent notification, CancellationToken cancellationToken)
