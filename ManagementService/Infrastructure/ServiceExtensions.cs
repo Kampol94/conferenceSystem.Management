@@ -24,6 +24,7 @@ public static class ServiceExtensions
         services.AddTransient<IMemberRepository, MemberRepository>();
         services.AddTransient<ISqlConnectionFactory, SqlConnectionFactory>(x => new SqlConnectionFactory(configuration.GetConnectionString("DefaultConnection")));
         services.AddTransient<IEventBus, EventBus>();
+        services.AddHostedService<EventReceiverService>();
 
         return services;
     }
